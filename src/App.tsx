@@ -19,6 +19,7 @@ import ProjectModal from "./components/ProjectModal";
 import TaskModal from "./components/TaskModal";
 import TaskCard from "./components/TaskCard";
 import Chat from "./components/Chat";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  useEffect(() => {
+    Notification.requestPermission() ;
+  }, [])
+  
   return (
     <div className="h-full w-full">
       <RouterProvider router={router} />

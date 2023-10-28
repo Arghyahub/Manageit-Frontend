@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from 'recoil';
 import { alertAtom, loadingAtom } from "../atom/global";
 import { loginParams, signupParams } from "../types/types";
+import { messaging } from "../firebase.js";
+import { getToken } from "firebase/messaging";
 
 const Auth = () => {
   const [newUser, setNewUser] = useState(true);
@@ -56,8 +58,14 @@ const Auth = () => {
       }
     }
     try {
-      const response = await axios.post("http://localhost:8000" + endpoint, input)
+      const fcmToken = await getToken(messaging, {
+        vapidKey:
+          "BGiA3Kl-gXDlsZNRzHhVxWbvVrXIjd_sDEAYefRkCU5CkdI0qKjXjyDxGTX-b_Jxjr-r7SsAYF07lcXAE8JBVCY",
+      });
+      console.log(fcmToken) ;
+      const response = await axios.post("http://localhost:8000" + endpoint, {...input,fcmToken: fcmToken})
       const data = response.data;
+      console.log("data : ",data);
       const token = data.token;
 
       if (token) {
